@@ -11,6 +11,6 @@ I made a controller for my RPi5 power switch and related devices like TV and sou
  - RP5ctrl.ino : Arduino sketch of the slave device
  - RPi5ctrl-sch.png : Schematic of the slave device
 
-I wrote a blog about this, please access it if you need more information.
-Method : https://pado.tea-nifty.com/top/2025/02/post-e7668f.html
-Make : https://pado.tea-nifty.com/top/2025/02/post-96e14b.html
+I wrote two blog about this in Japanese, please access it if you need more information:<br />
+Method : https://pado.tea-nifty.com/top/2025/02/post-e7668f.html<br />
+Make : https://pado.tea-nifty.com/top/2025/02/post-96e14b.html<br />
