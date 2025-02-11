@@ -1,6 +1,7 @@
 /*
   RP5ctrl : AV controller for Raspberry Pi 5 power switch and related devices
     by pado3@mstdn.jp
+  r1.1 2025/02/11 clarify through command (0x0), RPi PW from SW will W action(single click)
   r1.0 2025/02/06 initial release
 
   pin assignment:
@@ -22,7 +23,7 @@
 #include "PinDefinitionsAndMore.h"  // IRremoteのピン定義等。同一フォルダに置く
 #include <IRremote.hpp>
 
-#define APP_VERSION "1.0 (2025/02/06 14:05)"  // アプリバージョン
+#define APP_VERSION "1.1 (2025/02/11 10:38)"  // アプリバージョン
 #define DELAY_AFTER_SW 300                    // チャタリング予防 in msec
 #define DELAY_AFTER_LOOP 100                  // CPUウェイト in msec
 
@@ -91,6 +92,12 @@ void loop() {
     // スイッチ入力からの外部制御
     ext_ctrl(sw);
     delay(DELAY_AFTER_SW);  // チャタリング予防（SPI非アクティブであればdelayが効く）
+    if (sw == 1) {          // loop内はdelayが効くのでRPi電源SWもシングルクリックでいい
+      Serial.print(F("put SW data="));
+      Serial.print(sw);
+      ext_ctrl(sw);         // toggle
+      delay(DELAY_AFTER_SW);
+    }
   } else {
     digitalWrite(LED, LOW);  // SPI割り込みが入ってもループに帰ってくるのでLED消灯できる
   }
@@ -100,7 +107,7 @@ void loop() {
 // SPI割り込み
 ISR(SPI_STC_vect) {
   byte cc = SPDR;  // SPDRレジスタにデータが送られてくる
-  if (0 < cc) {
+  if (0 < cc) {    // if 0x0, through the data 1.1
     // Serial.println();
     Serial.print(F("receive SPI data="));
     Serial.print(cc);
