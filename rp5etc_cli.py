@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.8
 # TinkerboardのspidevがPython3.5.3でNG、ASUS.GPIOがPython3.13でNG、よって3.8
 #
+# r1.2 2025/02/08 ウェイト見直し（RPi5の電源ダブル送信のところで前後間違い）
 # r1.1 2025/02/05 RPi5の電源はマスタ側からダブルクリック
 # r1.0 2025/02/01 initial release
 # Raspberry Pi 5の電源とAV機器の簡単なコントローラ by pado@mstdn.jp
@@ -26,9 +27,9 @@ def demo(args):
         time.sleep(0.5)     # チャタリング予防
         if CMD_hex == 0x1:  # RPi5の場合、マスタ側でダブルクリックする
             print("RPi POWER ON/OFF")
-            time.sleep(0.5)     # SWinを押す時間、200msec以上なら大丈夫そう
             spi.xfer([CMD_hex])
             print("CMD {:x} is send.".format(CMD_hex))
+            time.sleep(0.5)     # 連続送信のためのウェイト
     spi.close()
 
 
